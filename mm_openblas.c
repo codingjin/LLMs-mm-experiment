@@ -9,10 +9,12 @@
 
 int main(int argc, char* argv[])
 {
+	
 	if (argc != 5) {
 		printf("Input error, usage: ./mm_openblas <THREAD_NUM> M N K\n");
 		return 1;
 	}
+	
 	
 	int thread_num = atoi(argv[1]);
 	int m = atoi(argv[2]);
@@ -28,22 +30,17 @@ int main(int argc, char* argv[])
 	uint32_t time_array[ROUND];
 	uint32_t median_time = 0;
 
-	//float* A = (float*)aligned_alloc(64, sizeof(float) * sizeofa);
 	float* A = (float*)malloc(sizeof(float) * sizeofa);
 	float* B = (float*)malloc(sizeof(float) * sizeofb);
 	float* C = (float*)malloc(sizeof(float) * sizeofc);
 
 	srand(149);
-	//float alpha = 0.674;
-	//float beta = 0.013;
 	for (int i = 0; i < sizeofa; i++)	A[i] = ((float)rand()) / RAND_MAX;
 	for (int i = 0; i < sizeofb; i++)	B[i] = ((float)rand()) / RAND_MAX;
 	for (int i = 0; i < sizeofc; i++)	C[i] = ((float)rand()) / RAND_MAX;
 	
-	//printf("ThreadNum=%d M=%d N=%d K=%d\n", thread_num, m, n, k);
 	for (int round = 0; round < ROUND; round++) {
 		gettimeofday(&start, NULL);
-		//cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, 0.674, A, k, B, n, 0.013, C, n);
 		cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, 1, A, k, B, n, 1, C, n);
 		gettimeofday(&finish, NULL);
 

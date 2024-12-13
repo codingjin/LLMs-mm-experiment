@@ -1,0 +1,22 @@
+MKL_MKL_LIB = /opt/intel/oneapi/mkl/2025.0/lib/intel64/
+MKL_INC = /opt/intel/oneapi/mkl/2025.0/include/
+
+CC = gcc
+CFLAGS = -Wall
+LDLIBS = -Wl,--start-group $(MKL_MKL_LIB)/libmkl_intel_ilp64.a $(MKL_MKL_LIB)/libmkl_gnu_thread.a $(MKL_MKL_LIB)/libmkl_core.a -Wl,--end-group -lgomp  -lpthread -lm -ldl
+
+%.o: %.c 
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(MKL_INC)
+
+mm_onemkl: mm_onemkl.o
+	$(CC) -o $@ $< $(CFLAGS) $(LDLIBS)
+
+.PHONY: all
+all: mm_onemkl
+	@echo "making mm_onemkl"
+
+.PHONY: clean
+clean:
+	rm ./mm_onemkl ./*.o
+
+

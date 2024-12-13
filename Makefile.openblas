@@ -1,0 +1,19 @@
+OPENBLAS_INC = /home/jin/OpenBLAS-develop/install/include/
+
+CC = gcc
+CFLAGS = -Wall
+LDLIBS = -lm -lpthread /home/jin/OpenBLAS-develop/libopenblas_haswellp-r0.3.28.dev.a
+
+%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(OPENBLAS_INC)
+
+mm_openblas: mm_openblas.o
+	$(CC) -o $@ $< $(CFLAGS) $(LDLIBS)
+
+.PHONY: all
+all: mm_openblas
+	@echo "done"
+
+.PHONY: clean
+clean:
+	rm ./mm_openblas ./*.o
